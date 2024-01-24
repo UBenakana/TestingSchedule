@@ -3,7 +3,7 @@ name: Scheduled Job
 on:
 
   schedule:
-    - cron: '*/30 * * * *'
+    - cron: '* * * * *'
 
 jobs:
   run-job:
