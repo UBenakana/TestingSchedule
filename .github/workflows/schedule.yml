@@ -1,0 +1,19 @@
+name: Scheduled Job
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+
+jobs:
+  run-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Run Your Script
+        run: |
+          # Add your command/script to be executed here
+          echo "Hello, this is your scheduled job!"
+
