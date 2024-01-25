@@ -22,28 +22,40 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm install
+
       - name: Run Job 1
         run: |
           echo "Running Job 1 with file: ${{ matrix.file }}"
           # Add your commands for Job 1 here
+          # Example: npm run job1 --file ${{ matrix.file }}
 
       - name: Run Job 2
         run: |
           echo "Running Job 2 with file: ${{ matrix.file }}"
           # Add your commands for Job 2 here
+          # Example: npm run job2 --file ${{ matrix.file }}
 
       - name: Run Job 3
         run: |
           echo "Running Job 3 with file: ${{ matrix.file }}"
           # Add your commands for Job 3 here
+          # Example: npm run job3 --file ${{ matrix.file }}
 
       - name: Run Job 4
         run: |
           echo "Running Job 4 with file: ${{ matrix.file }}"
           # Add your commands for Job 4 here
+          # Example: npm run job4 --file ${{ matrix.file }}
 
       - name: Run Job 5
         run: |
           echo "Running Job 5 with file: ${{ matrix.file }}"
           # Add your commands for Job 5 here
-          ----------------------------------------------------------
+          # Example: npm run job5 --file ${{ matrix.file }}
