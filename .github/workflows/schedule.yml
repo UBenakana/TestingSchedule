@@ -1,20 +1,48 @@
-name: Scheduled Job
+name: Parallel Jobs Example
 
 on:
-
-  schedule:
-    - cron: '*/2 * * * *'
+  push:
+    branches:
+      - main
 
 jobs:
-  run-job:
+  run_parallel_jobs:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        file:
+          - file1.txt
+          - file2.txt
+          - file3.txt
+          - file4.txt
+          - file5.txt
+
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Run Your Script
+      - name: Run Job 1
         run: |
-          # Add your command/script to be executed here
-          echo "Hello, this is your scheduled job!"
+          echo "Running Job 1 with file: ${{ matrix.file }}"
+          # Add your commands for Job 1 here
 
+      - name: Run Job 2
+        run: |
+          echo "Running Job 2 with file: ${{ matrix.file }}"
+          # Add your commands for Job 2 here
+
+      - name: Run Job 3
+        run: |
+          echo "Running Job 3 with file: ${{ matrix.file }}"
+          # Add your commands for Job 3 here
+
+      - name: Run Job 4
+        run: |
+          echo "Running Job 4 with file: ${{ matrix.file }}"
+          # Add your commands for Job 4 here
+
+      - name: Run Job 5
+        run: |
+          echo "Running Job 5 with file: ${{ matrix.file }}"
+          # Add your commands for Job 5 here
