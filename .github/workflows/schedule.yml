@@ -23,5 +23,10 @@ jobs:
 
       - name: Run Job
         run: |
-          echo "Running Job with file: ${{ matrix.file }}"
-          # Add your commands for each job with ${{ matrix.file }} here
+          for input_file in "${{ matrix.file }}"; do
+            output_file="output_${input_file}"
+            echo "Running Job with input file: $input_file"
+            echo "Output will be written to: $output_file"
+            # Add your commands for each job with $input_file here
+            # Example: ./your_script.sh --input $input_file --output $output_file
+          done
