@@ -6,57 +6,22 @@ on:
       - main
 
 jobs:
-  job1:
+  run_job:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        file:
+          - file1.txt
+          - file2.txt
+          - file3.txt
+          - file4.txt
+          - file5.txt
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Run Job 1
+      - name: Run Job
         run: |
-          echo "Running Job 1 with file: file1.txt"
-          # Add your commands for Job 1 with file1.txt here
-
-  job2:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Run Job 2
-        run: |
-          echo "Running Job 2 with file: file2.txt"
-          # Add your commands for Job 2 with file2.txt here
-
-  job3:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Run Job 3
-        run: |
-          echo "Running Job 3 with file: file3.txt"
-          # Add your commands for Job 3 with file3.txt here
-
-  job4:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Run Job 4
-        run: |
-          echo "Running Job 4 with file: file4.txt"
-          # Add your commands for Job 4 with file4.txt here
-
-  job5:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Run Job 5
-        run: |
-          echo "Running Job 5 with file: file5.txt"
-          # Add your commands for Job 5 with file5.txt here
+          echo "Running Job with file: ${{ matrix.file }}"
+          # Add your commands for each job with ${{ matrix.file }} here
