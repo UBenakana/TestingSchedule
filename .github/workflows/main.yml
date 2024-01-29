@@ -1,42 +1,43 @@
-name: Parallel Processing
-
-on:
-  push:
-    branches:
-      - main
+on: push
 
 jobs:
-  process_files:
+  process_inputs:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        file:
-          - file1
-          - file2
-          - file3
-          - file4
-          - file5
-
-    outputs:
-      # Define an output variable for each file
-      file1-output: ${{ matrix.file }}
-      file2-output: ${{ matrix.file }}
-      file3-output: ${{ matrix.file }}
-      file4-output: ${{ matrix.file }}
-      file5-output: ${{ matrix.file }}
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Process File
-        id: process
+      - uses: actions/checkout@v2
+      - name: Get number of inputs
+        id: get_inputs
         run: |
-          # Replace this command with the actual command to process your file
-          output=$(echo "Processing ${{ matrix.file }}")
-          echo "::set-output name=output::$output"
-
-      - name: Store Output
+          INPUTS=$(ls inputs | wc -l)
+          echo "::set-output name=num_inputs::$INPUTS"
+      - name: Process inputs
+        id: process_inputs
         run: |
-          # You can use the output in this step or store it for future use
-          echo "Output: ${{ steps.process.outputs.output }}"
+          for input in inputs/*
+          do
+            job="process_${{ github.sha }}_$(basename $input)"
+            echo "::group::$job"
+            echo "::endgroup::"
+          done
+
+${{ steps.get_inputs.outputs.num_inputs }}
+
+jobs:
+${{ fromJSON(steps.process_inputs.outputs.result) }}
+  process_%job%:
+    needs: process_inputs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Process %job%
+        run: |
+          # Process input file %job%
+          outputfile=%job%-output
+          
+          # Generate output file
+          echo "Output" > $outputfile
+        
+      - uses: actions/upload-artifact@%v2
+        with:
+          name: %job%-output
+          path: $outputfile
