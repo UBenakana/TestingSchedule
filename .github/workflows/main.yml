@@ -9,10 +9,6 @@ jobs:
   process_files:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        file: ${{fromJson(secrets.INPUT_FILES)}}
-
     outputs:
       file-output: ${{ matrix.file }}
 
@@ -20,12 +16,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Set up input files
+        id: setup
+        run: |
+          IFS=',' read -r -a files <<< "${{ secrets.INPUT_FILES }}"
+          matrix="{\"file\": [\"${files[@]}\"]}"
+          echo "Matrix: $matrix"
+          echo "::set-output name=matrix::$matrix"
+
       - name: Process File
         id: process
         run: |
-          # Replace this command with the actual command to process your file
-          output=$(echo "Processing ${{ matrix.file }}")
-          echo "::set-output name=output::$output"
+          for file in "${{fromJson(needs.setup.outputs.matrix)}}"; do
+            # Replace this command with the actual command to process your file
+            output=$(echo "Processing $file")
+            echo "::set-output name=output::$output"
+          done
 
       - name: Store Output
         run: |
