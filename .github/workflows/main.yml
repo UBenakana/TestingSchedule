@@ -10,12 +10,22 @@ env:
   INPUT_FILES: "file1,file2,file3,file4,file5"  # Update this with your file names
 
 jobs:
-  process_files:
+  set_up:
     runs-on: ubuntu-latest
+    outputs:
+      env: ${{ steps.set_up.outputs.env }}
+    steps:
+      - name: Set up input files
+        id: set_up
+        run: |
+          echo "env=INPUT_FILES=$(echo '${{ env.INPUT_FILES }}' | jq -R -s 'split(",") | map({ key: . }) | from_entries')" >> $GITHUB_ENV
 
+  process_files:
+    needs: set_up
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        file: ${{ fromJson(env.INPUT_FILES) }}
+        file: ${{fromJson(needs.set_up.outputs.env.INPUT_FILES)}}
 
     outputs:
       file-output: ${{ matrix.file }}
