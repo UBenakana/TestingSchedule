@@ -1,43 +1,34 @@
-name: Process Files
+name: Parallel Processing
 
 on:
-  push: 
-    branches: [main]
+  workflow_run:
+    workflows: ["External Trigger Workflow"]
+    types:
+      - completed
 
 jobs:
-
-  read_config:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - id: read  
-      run: |
-        echo ::set-output name=num::$(cat num_files.txt)
-        
   process_files:
-
-    needs: read_config
-    
     runs-on: ubuntu-latest
 
     strategy:
-      max-parallel: ${{fromJson(needs.read_config.outputs.num)}}
-      matrix: 
-        file: [${{ fromJson(join(range(fromJson(needs.read_config.outputs.num)))) }}]
-    
+      matrix:
+        file: ${{fromJson(secrets.INPUT_FILES)}}
+
+    outputs:
+      file-output: ${{ matrix.file }}
+
     steps:
-    
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
-        
-      - name: Process files
+
+      - name: Process File
         id: process
         run: |
-          echo "Processing file ${{ matrix.file }}"
-          echo "Output of file ${{ matrix.file }}" >> outputs.txt
-          echo ::set-output name=out::$(cat outputs.txt)
-          
-      - name: Print outputs  
+          # Replace this command with the actual command to process your file
+          output=$(echo "Processing ${{ matrix.file }}")
+          echo "::set-output name=output::$output"
+
+      - name: Store Output
         run: |
-          echo "All outputs:"  
-          cat outputs.txt
+          # You can use the output in this step or store it for future use
+          echo "Output: ${{ steps.process.outputs.output }}"
