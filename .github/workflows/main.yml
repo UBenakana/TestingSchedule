@@ -12,6 +12,9 @@ jobs:
     outputs:
       file-output: ${{ matrix.file }}
 
+    env:
+      INPUT_FILES: ${{ secrets.INPUT_FILES }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -19,7 +22,7 @@ jobs:
       - name: Set up input files
         id: setup
         run: |
-          IFS=',' read -r -a files <<< "${{ secrets.INPUT_FILES }}"
+          IFS=',' read -r -a files <<< "$INPUT_FILES"
           matrix="{\"file\": [\"${files[@]}\"]}"
           echo "Matrix: $matrix"
           echo "::set-output name=matrix::$matrix"
