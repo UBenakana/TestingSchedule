@@ -1,34 +1,43 @@
-name: Parallel Processing
+name: Process Files
 
 on:
-  push:
-    branches:
-      - main
+  push: 
+    branches: [main]
 
 jobs:
+
+  read_config:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - id: read  
+      run: |
+        echo ::set-output name=num::$(cat num_files.txt)
+        
   process_files:
+
+    needs: read_config
+    
     runs-on: ubuntu-latest
 
+    strategy:
+      max-parallel: ${{fromJson(needs.read_config.outputs.num)}}
+      matrix: 
+        file: [${{ fromJson(join(range(fromJson(needs.read_config.outputs.num)))) }}]
+    
     steps:
-      - name: Checkout repository
+    
+      - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Read input files
-        id: setup
-        run: |
-          echo "Input files: $(cat input_files.json)"
-          echo "::set-output name=files::$(cat input_files.json)"
-
-      - name: Process File
+        
+      - name: Process files
         id: process
         run: |
-          for file in "${{fromJson(needs.setup.outputs.files)}}"; do
-            # Replace this command with the actual command to process your file
-            output=$(echo "Processing $file")
-            echo "::set-output name=output::$output"
-          done
-
-      - name: Store Output
+          echo "Processing file ${{ matrix.file }}"
+          echo "Output of file ${{ matrix.file }}" >> outputs.txt
+          echo ::set-output name=out::$(cat outputs.txt)
+          
+      - name: Print outputs  
         run: |
-          # You can use the output in this step or store it for future use
-          echo "Output: ${{ steps.process.outputs.output }}"
+          echo "All outputs:"  
+          cat outputs.txt
