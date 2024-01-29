@@ -19,8 +19,8 @@ jobs:
 
     outputs:
       # Define an output variable for each file
-      file1-output: ${{ matrix.file }}
-      file2-output: ${{ matrix.file }}
+      file1-output: ${{ matrix.file.file1 }}
+      file2-output: ${{ matrix.file.file2 }}
       file3-output: ${{ matrix.file }}
       file4-output: ${{ matrix.file }}
       file5-output: ${{ matrix.file }}
