@@ -20,7 +20,7 @@ jobs:
             echo "::endgroup::"
           done
 
-${{ steps.get_inputs.outputs.num_inputs }}
+num_inputs: ${{ steps.get_inputs.outputs.num_inputs }}
 
 jobs:
 ${{ fromJSON(steps.process_inputs.outputs.result) }}
