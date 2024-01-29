@@ -1,10 +1,9 @@
 name: Parallel Processing
 
 on:
-  workflow_run:
-    workflows: ["External Trigger Workflow"]
-    types:
-      - completed
+  push:
+    branches:
+      - main
 
 jobs:
   process_files:
