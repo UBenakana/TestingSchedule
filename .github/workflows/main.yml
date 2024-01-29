@@ -13,11 +13,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up input files
+      - name: Read input files
         id: setup
         run: |
-          INPUT_FILES=$INPUT_FILES
-          echo "::set-output name=files::[$INPUT_FILES]"
+          echo "Input files: $(cat input_files.json)"
+          echo "::set-output name=files::$(cat input_files.json)"
 
       - name: Process File
         id: process
