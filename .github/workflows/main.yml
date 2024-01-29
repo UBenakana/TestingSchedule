@@ -12,9 +12,10 @@ env:
 jobs:
   process_files:
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        file: ${{ split(env.INPUT_FILES, ',') }}
+        file: ${{ fromJson(env.INPUT_FILES) }}
 
     outputs:
       file-output: ${{ matrix.file }}
