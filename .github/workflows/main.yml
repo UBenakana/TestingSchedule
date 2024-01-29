@@ -21,9 +21,9 @@ jobs:
       # Define an output variable for each file
       file1-output: ${{ matrix.file.file1 }}
       file2-output: ${{ matrix.file.file2 }}
-      file3-output: ${{ matrix.file }}
-      file4-output: ${{ matrix.file }}
-      file5-output: ${{ matrix.file }}
+      file3-output: ${{ matrix.file.file3 }}
+      file4-output: ${{ matrix.file.file4 }}
+      file5-output: ${{ matrix.file.file5 }}
 
     steps:
       - name: Checkout repository
@@ -33,7 +33,7 @@ jobs:
         id: process
         run: |
           # Replace this command with the actual command to process your file
-          output=$(echo "Processing ${{ matrix.file }}")
+          output=$(echo "Processing ${{ matrix.file.file* }}")
           echo "::set-output name=output::$output"
 
       - name: Store Output
