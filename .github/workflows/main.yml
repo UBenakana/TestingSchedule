@@ -5,30 +5,25 @@ on:
     branches:
       - main
 
-env:
-  INPUT_FILES_COUNT: 5  # Update this with the desired count
-  INPUT_FILES: "file1,file2,file3,file4,file5"  # Update this with your file names
-
 jobs:
-  set_up:
-    runs-on: ubuntu-latest
-    outputs:
-      env: ${{ steps.set_up.outputs.env }}
-    steps:
-      - name: Set up input files
-        id: set_up
-        run: |
-          echo "env=INPUT_FILES=$(echo '${{ env.INPUT_FILES }}' | jq -R -s 'split(",") | map({ key: . }) | from_entries')" >> $GITHUB_ENV
-
   process_files:
-    needs: set_up
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        file: ${{fromJson(needs.set_up.outputs.env.INPUT_FILES)}}
+        file:
+          - file1
+          - file2
+          - file3
+          - file4
+          - file5
 
     outputs:
-      file-output: ${{ matrix.file }}
+      # Define an output variable for each file
+      file1-output: ${{ matrix.file }}
+      file2-output: ${{ matrix.file }}
+      file3-output: ${{ matrix.file }}
+      file4-output: ${{ matrix.file }}
+      file5-output: ${{ matrix.file }}
 
     steps:
       - name: Checkout repository
