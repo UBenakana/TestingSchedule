@@ -33,7 +33,7 @@ jobs:
         id: process
         run: |
           # Replace this command with the actual command to process your file
-          output=$(echo "Processing ${{ matrix.file.file* }}")
+          output=$(echo "Processing ${{ matrix.file }}")
           echo "::set-output name=output::$output"
 
       - name: Store Output
