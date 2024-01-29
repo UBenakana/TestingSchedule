@@ -17,11 +17,26 @@ jobs:
           - file4
           - file5
 
+    outputs:
+      # Define an output variable for each file
+      file1-output: ${{ matrix.file }}
+      file2-output: ${{ matrix.file }}
+      file3-output: ${{ matrix.file }}
+      file4-output: ${{ matrix.file }}
+      file5-output: ${{ matrix.file }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
       - name: Process File
+        id: process
         run: |
           # Replace this command with the actual command to process your file
-          echo "Processing ${{ matrix.file }}"
+          output=$(echo "Processing ${{ matrix.file }}")
+          echo "::set-output name=output::$output"
+
+      - name: Store Output
+        run: |
+          # You can use the output in this step or store it for future use
+          echo "Output: ${{ steps.process.outputs.output }}"
